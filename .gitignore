@@ -1,0 +1,46 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Diagnostic output from prettier
+.eslintcache
+.stylelintcache
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Production build output
+dist/
+build/
+
+# Optional Vite cache directory
+.vite/
+
+# Local Environment & Secrets (Never commit these!)
+.env
+.env.*
+!.env.example
+.env.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Sanity Studio specific ignores (inside the sanity folder)
+sanity/node_modules/
+sanity/dist/
+sanity/.env
+sanity/.env.*
