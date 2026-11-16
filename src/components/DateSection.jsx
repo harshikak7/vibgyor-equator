@@ -171,7 +171,7 @@ export default function DateSection() {
                 htmlFor="meaningful-date"
                 className="mb-2 block font-['Jakarta_Sans'] text-[10px] font-semibold uppercase tracking-widest text-[#0F3D3A]/70"
               >
-                The date that matters to you (DD/MM/YYYY)
+                The date that matters to you (MM/DD/YYYY)
               </label>
 
               <input
