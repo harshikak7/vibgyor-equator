@@ -4,7 +4,6 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 
 import Header from './components/Header.jsx';
 import Home from './pages/Home.jsx';
-import CollectionPage from './pages/CollectionPage.jsx';
 
 function PlaceholderPage({ title, description }) {
   return (
@@ -42,11 +41,6 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-
-        <Route
-          path="/rare-finds/:category"
-          element={<CollectionPage />}
-        />
 
         <Route
           path="/gems-jewellery"
