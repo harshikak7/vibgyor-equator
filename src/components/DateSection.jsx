@@ -1,5 +1,6 @@
+
 import React, { useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, CalendarDays } from "lucide-react";
 
 const SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
 
@@ -24,41 +25,58 @@ export default function DateSection() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Honeypot spam protection
     if (form.website) return;
 
+    // Check configuration
     if (!SCRIPT_URL) {
       setStatus("error");
-      setMessage("Enquiry form is not configured yet. Please try again later.");
+      setMessage(
+        "Enquiry form is not configured yet. Please try again later."
+      );
+      return;
+    }
+
+    // Validate phone number using JavaScript
+    const phone = form.phone.trim();
+    const phoneRegex = /^[0-9+\s()-]{7,20}$/;
+
+    if (!phoneRegex.test(phone)) {
+      setStatus("error");
+      setMessage("Please enter a valid mobile number.");
+      return;
+    }
+
+    // Check required values
+    if (!form.name.trim() || !form.date) {
+      setStatus("error");
+      setMessage("Please complete all required fields.");
       return;
     }
 
     setStatus("sending");
     setMessage("");
 
-    // Format date from YYYY-MM-DD to DD/MM/YYYY before submitting
-    let formattedDate = form.date;
-    if (form.date) {
-      const [year, month, day] = form.date.split("-");
-      if (year && month && day) {
-        formattedDate = `${day}/${month}/${year}`;
-      }
-    }
-
-    const payload = {
-      ...form,
-      date: formattedDate,
-    };
+    // Keep date as YYYY-MM-DD for the Apps Script endpoint
+    const payload = new URLSearchParams({
+      name: form.name.trim(),
+      phone,
+      date: form.date,
+      website: "",
+    });
 
     try {
       await fetch(SCRIPT_URL, {
         method: "POST",
         mode: "no-cors",
-        body: new URLSearchParams(payload),
+        body: payload,
       });
 
+      // no-cors does not allow the browser to read the server response.
+      // This indicates the request was sent, not that the sheet saved it.
       setStatus("success");
       setMessage(
-        "Thank you! Your date enquiry has been submitted. We'll be in touch."
+        "Your enquiry has been sent. If you don't hear from us, please contact us directly."
       );
 
       setForm({
@@ -68,6 +86,8 @@ export default function DateSection() {
         website: "",
       });
     } catch (error) {
+      console.error("Date enquiry submission error:", error);
+
       setStatus("error");
       setMessage(
         "Something went wrong. Please try again or contact us directly."
@@ -156,8 +176,6 @@ export default function DateSection() {
                 inputMode="tel"
                 required
                 maxLength={20}
-                pattern="[0-9+\s()-]{7,20}"
-                title="Please enter a valid mobile number."
                 value={form.phone}
                 onChange={handleChange}
                 placeholder="Enter your mobile number"
@@ -171,18 +189,25 @@ export default function DateSection() {
                 htmlFor="meaningful-date"
                 className="mb-2 block font-['Jakarta_Sans'] text-[10px] font-semibold uppercase tracking-widest text-[#0F3D3A]/70"
               >
-                The date that matters to you (MM/DD/YYYY)
+                The date that matters to you (DD/MM/YYYY)
               </label>
 
-              <input
-                id="meaningful-date"
-                name="date"
-                type="date"
-                required
-                value={form.date}
-                onChange={handleChange}
-                className="w-full border-b border-[#0F3D3A]/25 bg-transparent px-0 py-3 font-['Jakarta_Sans'] text-sm text-[#0F3D3A] outline-none focus:border-[#6C151E]"
-              />
+              <div className="relative">
+                <input
+                  id="meaningful-date"
+                  name="date"
+                  type="date"
+                  required
+                  value={form.date}
+                  onChange={handleChange}
+                  className="w-full border-b border-[#0F3D3A]/25 bg-transparent px-0 py-3 pr-10 font-['Jakarta_Sans'] text-sm text-[#0F3D3A] outline-none focus:border-[#6C151E]"
+                />
+
+                <CalendarDays
+                  size={17}
+                  className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 text-[#6C151E]"
+                />
+              </div>
             </div>
 
             {/* Honeypot spam protection */}
