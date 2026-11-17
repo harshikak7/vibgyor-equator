@@ -41,14 +41,14 @@ export default function Hero() {
 
       {/* Hero content */}
       <div className="relative z-10 flex flex-col items-start px-1 text-left max-[650px]:order-1 max-[650px]:px-0">
-        <motion.p
+        {/* <motion.p
           variants={fadeUp}
           initial="hidden"
           animate="visible"
           className="mb-5 text-[9px] font-semibold uppercase tracking-[0.2em] text-[#6C151E]"
         >
           VIBGYOR EQUATOR
-        </motion.p>
+        </motion.p> */}
 
         <motion.h1
           variants={fadeUp}

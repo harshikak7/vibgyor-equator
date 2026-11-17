@@ -11,7 +11,7 @@
   "dependencies": {
     "@sanity/client": "^6.29.1",
     "@sanity/image-url": "^2.1.1",
-    "framer-motion": "^11.11.17",
+    "framer-motion": "^11.18.2",
     "googleapis": "^190.0.0",
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",
