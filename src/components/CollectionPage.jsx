@@ -37,33 +37,37 @@ export default function CollectionSection() {
     (category) => category.value === activeCategory
   );
 
-  const featuredProducts = useMemo(() => {
-    return products
-      .filter(
-        (product) =>
-          product.category === activeCategory &&
-          product.availability === "available"
-      )
-      .sort((a, b) => {
-        if (a.featured !== b.featured) return a.featured ? -1 : 1;
-        return (a.displayOrder ?? 999) - (b.displayOrder ?? 999);
-      })
-      .slice(0, 6);
-  }, [products, activeCategory]);
+  
+const featuredProducts = useMemo(() => {
+  return products
+    .filter(
+      (product) =>
+        product.category === activeCategory &&
+        product.availability === "available" &&
+        product.featured === true
+    )
+    .sort(
+      (a, b) =>
+        (a.displayOrder ?? 999) - (b.displayOrder ?? 999)
+    )
+    .slice(0, 6);
+}, [products, activeCategory]);
+
 
   const handleEnquiry = (product) => {
-    if (!WHATSAPP_NUMBER) {
-      console.error("WhatsApp number is not configured.");
-      return;
-    }
+  const phone = (import.meta.env.VITE_WHATSAPP_NUMBER || "").replace(/\D/g, "");
 
-    const message = `Hello Vibgyor Equator, I'm interested in ${product.name}. Could you please share more details?`;
-    const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-      message
-    )}`;
+  if (!phone) {
+    alert("WhatsApp number is not configured.");
+    return;
+  }
 
-    window.open(whatsappURL, "_blank", "noopener,noreferrer");
-  };
+  const message = `Hello Vibgyor Equator, I'm interested in ${product.name}. Could you please share more details?`;
+
+  const whatsappURL = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+  window.open(whatsappURL, "_blank", "noopener,noreferrer");
+};
 
   return (
     <section

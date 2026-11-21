@@ -1,9 +1,13 @@
 
-import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import React from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 
-import Header from './components/Header.jsx';
-import Home from './pages/Home.jsx';
+import Header from "./components/Header.jsx";
+import Home from "./pages/Home.jsx";
+import CollectionPage from "./pages/CollectionPage.jsx";
+
+import CoinsPage from "./pages/CoinsPage.jsx";
+// import CountryCoinsPage from "./pages/CountryCoinsPage.jsx";
 
 function PlaceholderPage({ title, description }) {
   return (
@@ -12,11 +16,11 @@ function PlaceholderPage({ title, description }) {
         VIBGYOR EQUATOR
       </p>
 
-      <h1 className="mb-5 font-serif text-5xl text-[#0F3D3A]">
+      <h1 className="mb-5 font-['Cinzel'] text-5xl text-[#0F3D3A]">
         {title}
       </h1>
 
-      <p className="mx-auto max-w-lg text-sm leading-7 text-[#43534B]">
+      <p className="mx-auto max-w-lg font-['Plus_Jakarta_Sans'] text-sm leading-7 text-[#43534B]">
         {description}
       </p>
     </main>
@@ -37,11 +41,33 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
+
+      {/* Shared Navbar */}
       <Header />
 
       <Routes>
+        {/* Homepage */}
         <Route path="/" element={<Home />} />
 
+        {/* Coins landing page */}
+        <Route
+          path="/rare-finds/coins"
+          element={<CoinsPage />}
+        />
+
+        {/* Individual country coins page */}
+        {/* <Route
+          path="/rare-finds/coins/:country"
+          element={<CountryCoinsPage />}
+        /> */}
+
+        {/* Other collection pages */}
+        <Route
+          path="/rare-finds/:category"
+          element={<CollectionPage />}
+        />
+
+        {/* Gems & Jewellery */}
         <Route
           path="/gems-jewellery"
           element={
@@ -52,6 +78,7 @@ export default function App() {
           }
         />
 
+        {/* Antiques */}
         <Route
           path="/antiques"
           element={
@@ -62,6 +89,7 @@ export default function App() {
           }
         />
 
+        {/* Contact */}
         <Route
           path="/contact"
           element={
@@ -72,6 +100,7 @@ export default function App() {
           }
         />
 
+        {/* 404 */}
         <Route
           path="*"
           element={
