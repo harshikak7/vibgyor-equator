@@ -5,6 +5,7 @@ export const allProductsQuery = `
     name,
     "slug": slug.current,
     category,
+    jewelleryType,
     country,
     year,
     denomination,

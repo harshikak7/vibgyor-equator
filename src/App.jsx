@@ -9,6 +9,8 @@ import CollectionPage from "./pages/CollectionPage.jsx";
 import CoinsPage from "./pages/CoinsPage.jsx";
 // import CountryCoinsPage from "./pages/CountryCoinsPage.jsx";
 
+import GemsJewelleryPage from "./pages/GemsJewelleryPage.jsx";
+
 function PlaceholderPage({ title, description }) {
   return (
     <main className="min-h-[65vh] bg-[#F5DABF] px-[7%] py-24 text-center">
@@ -70,12 +72,7 @@ export default function App() {
         {/* Gems & Jewellery */}
         <Route
           path="/gems-jewellery"
-          element={
-            <PlaceholderPage
-              title="Gems & Jewellery"
-              description="Discover distinctive gems and jewellery selected with care."
-            />
-          }
+          element={<GemsJewelleryPage />}
         />
 
         {/* Antiques */}

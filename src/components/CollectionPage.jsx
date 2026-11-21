@@ -1,3 +1,4 @@
+
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -5,8 +6,6 @@ import { ArrowUpRight, ChevronDown } from "lucide-react";
 
 import { useProducts } from "../hooks/useProducts";
 import { urlFor } from "../lib/imageUrl";
-
-const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER;
 
 const categories = [
   { label: "Gems & Jewellery", value: "gems-jewellery", link: "/gems-jewellery" },
@@ -18,7 +17,6 @@ const categories = [
 
 const EASE = [0.22, 1, 0.36, 1];
 
-// Reveal variants
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } },
@@ -30,52 +28,54 @@ const list = {
 };
 
 export default function CollectionSection() {
-  const { products = [], loading } = useProducts();
+  const { products = [], loading, error } = useProducts();
   const [activeCategory, setActiveCategory] = useState("gems-jewellery");
 
   const selectedCategory = categories.find(
     (category) => category.value === activeCategory
   );
 
-  
-const featuredProducts = useMemo(() => {
-  return products
-    .filter(
-      (product) =>
-        product.category === activeCategory &&
-        product.availability === "available" &&
-        product.featured === true
-    )
-    .sort(
-      (a, b) =>
-        (a.displayOrder ?? 999) - (b.displayOrder ?? 999)
-    )
-    .slice(0, 6);
-}, [products, activeCategory]);
+  // Available products first; featured products appear at the beginning.
+  // This prevents the homepage section from being empty just because
+  // fewer than six products have been marked as featured in Sanity.
+  const featuredProducts = useMemo(() => {
+    return products
+      .filter(
+        (product) =>
+          product.category === activeCategory &&
+          product.availability === "available"
+      )
+      .sort((a, b) => {
+        if (a.featured !== b.featured) {
+          return a.featured ? -1 : 1;
+        }
 
+        return (a.displayOrder ?? 999) - (b.displayOrder ?? 999);
+      })
+      .slice(0, 6);
+  }, [products, activeCategory]);
 
   const handleEnquiry = (product) => {
-  const phone = (import.meta.env.VITE_WHATSAPP_NUMBER || "").replace(/\D/g, "");
+    const phone = (import.meta.env.VITE_WHATSAPP_NUMBER || "").replace(/\D/g, "");
 
-  if (!phone) {
-    alert("WhatsApp number is not configured.");
-    return;
-  }
+    if (!phone) {
+      alert("WhatsApp number is not configured.");
+      return;
+    }
 
-  const message = `Hello Vibgyor Equator, I'm interested in ${product.name}. Could you please share more details?`;
+    const message = `Hello Vibgyor Equator, I'm interested in ${product.name}. Could you please share more details?`;
+    const whatsappURL = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
-  const whatsappURL = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-
-  window.open(whatsappURL, "_blank", "noopener,noreferrer");
-};
+    window.open(whatsappURL, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <section
       id="collections"
-      className="bg-[#F7F1E3] px-5 py-16 md:px-10 md:py-20"
+      className="bg-[#F7F1E3] px-5 py-12 md:px-10 md:py-16"
     >
       <div className="mx-auto w-full max-w-[1400px]">
-        {/* Heading */}
+        {/* HEADING */}
         <motion.div
           variants={list}
           initial="hidden"
@@ -85,7 +85,7 @@ const featuredProducts = useMemo(() => {
         >
           <motion.h2
             variants={fadeUp}
-            className="font-['Cinzel'] text-2xl font-medium leading-tight text-[#0F3D3A] md:text-3xl lg:text-[38px]"
+            className="font-['Cinzel'] text-2xl font-semibold leading-tight text-[#0F3D3A] md:text-3xl lg:text-[38px]"
           >
             A Closer Look at Our Collections
           </motion.h2>
@@ -98,7 +98,7 @@ const featuredProducts = useMemo(() => {
           </motion.p>
         </motion.div>
 
-        {/* Desktop tabs */}
+        {/* DESKTOP CATEGORY TABS */}
         <motion.div
           variants={fadeUp}
           initial="hidden"
@@ -127,7 +127,7 @@ const featuredProducts = useMemo(() => {
           })}
         </motion.div>
 
-        {/* Mobile dropdown */}
+        {/* MOBILE CATEGORY DROPDOWN */}
         <div className="relative mb-6 md:hidden">
           <select
             value={activeCategory}
@@ -148,7 +148,7 @@ const featuredProducts = useMemo(() => {
           />
         </div>
 
-        {/* Products */}
+        {/* PRODUCTS */}
         {loading ? (
           <div className="flex gap-4 overflow-hidden">
             {[1, 2, 3, 4, 5, 6].map((item) => (
@@ -162,6 +162,12 @@ const featuredProducts = useMemo(() => {
               </div>
             ))}
           </div>
+        ) : error ? (
+          <div className="py-12 text-center">
+            <p className="font-['Plus_Jakarta_Sans'] text-sm text-[#6C151E]">
+              We couldn't load the collection right now. Please try again shortly.
+            </p>
+          </div>
         ) : featuredProducts.length > 0 ? (
           <motion.div
             key={activeCategory}
@@ -173,12 +179,11 @@ const featuredProducts = useMemo(() => {
           >
             {featuredProducts.map((product) => (
               <motion.article
-                key={product._id || product.slug?.current || product.name}
+                key={product._id || product.slug || product.name}
                 variants={fadeUp}
                 className="group w-[145px] shrink-0 sm:w-[175px] lg:w-[190px] xl:w-[200px]"
               >
-                {/* Image */}
-                <div className="relative aspect-square overflow-hidden bg-[#EAE7DC]">
+                <div className="relative aspect-square overflow-hidden bg-[#EAE4D8]">
                   {product.coverImage ? (
                     <img
                       src={urlFor(product.coverImage)
@@ -197,12 +202,12 @@ const featuredProducts = useMemo(() => {
                     </div>
                   )}
 
-                  {/* Hover enquiry */}
-                  <div className="absolute inset-0 flex items-end bg-[#0F3D3A]/0 p-2 transition-all duration-300 group-hover:bg-[#0F3D3A]/40 sm:p-3">
+                  {/* Enquiry button: visible on touch devices, hover on desktop */}
+                  <div className="absolute inset-x-0 bottom-0 p-2 sm:p-3 sm:opacity-0 sm:transition-opacity sm:duration-300 sm:group-hover:opacity-100">
                     <button
                       type="button"
                       onClick={() => handleEnquiry(product)}
-                      className="flex w-full translate-y-2 items-center justify-between bg-[#F5DABF] px-2.5 py-3 font-['Plus_Jakarta_Sans'] text-[8px] font-semibold uppercase tracking-[0.1em] text-[#0F3D3A] opacity-0 transition-all duration-300 hover:bg-white group-hover:translate-y-0 group-hover:opacity-100 sm:text-[9px]"
+                      className="flex w-full items-center justify-between bg-[#F5DABF] px-2.5 py-3 font-['Plus_Jakarta_Sans'] text-[8px] font-semibold uppercase tracking-[0.1em] text-[#0F3D3A] transition-colors hover:bg-white sm:text-[9px]"
                     >
                       <span>Enquire Now</span>
                       <ArrowUpRight size={14} />
@@ -210,9 +215,8 @@ const featuredProducts = useMemo(() => {
                   </div>
                 </div>
 
-                {/* Details */}
                 <div className="pt-2.5">
-                  <h3 className="font-['Cinzel'] text-[11px] font-medium leading-[1.5] text-[#0F3D3A] sm:text-xs">
+                  <h3 className="font-['Cinzel'] text-[11px] font-semibold leading-[1.5] text-[#0F3D3A] sm:text-xs">
                     {product.name}
                   </h3>
 
@@ -231,13 +235,13 @@ const featuredProducts = useMemo(() => {
               </motion.article>
             ))}
 
-            {/* View More */}
+            {/* VIEW MORE */}
             <motion.div
               variants={fadeUp}
               className="flex shrink-0 items-center self-stretch px-1"
             >
               <Link
-                to={selectedCategory.link}
+                to={selectedCategory?.link || "/gems-jewellery"}
                 className="group inline-flex items-center justify-center gap-2 border border-[#0F3D3A] px-4 py-3 font-['Plus_Jakarta_Sans'] text-[9px] font-semibold uppercase tracking-[0.1em] text-[#0F3D3A] transition-all duration-300 hover:bg-[#0F3D3A] hover:text-[#F5DABF]"
               >
                 <span>View More</span>
@@ -256,7 +260,7 @@ const featuredProducts = useMemo(() => {
             animate="show"
             className="flex min-h-[180px] flex-col items-center justify-center px-5 text-center"
           >
-            <h3 className="font-['Cinzel'] text-lg text-[#0F3D3A]">
+            <h3 className="font-['Cinzel'] text-lg font-semibold text-[#0F3D3A]">
               Something special is on its way.
             </h3>
 
@@ -266,7 +270,7 @@ const featuredProducts = useMemo(() => {
             </p>
 
             <Link
-              to={selectedCategory.link}
+              to={selectedCategory?.link || "/gems-jewellery"}
               className="mt-4 inline-flex items-center gap-2 border border-[#0F3D3A] px-4 py-3 font-['Plus_Jakarta_Sans'] text-[9px] font-semibold uppercase tracking-widest text-[#0F3D3A] transition-colors hover:bg-[#0F3D3A] hover:text-[#F5DABF]"
             >
               View More
@@ -275,7 +279,6 @@ const featuredProducts = useMemo(() => {
           </motion.div>
         )}
 
-        {/* Scroll hint */}
         {!loading && featuredProducts.length > 2 && (
           <p className="mt-3 text-right font-['Plus_Jakarta_Sans'] text-[8px] font-medium uppercase tracking-[0.15em] text-[#0F3D3A]/40">
             Scroll to explore <span aria-hidden="true">→</span>
