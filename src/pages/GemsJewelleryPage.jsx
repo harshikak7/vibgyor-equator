@@ -229,17 +229,6 @@ export default function GemsJewelleryPage() {
 
   {/* Image overlay */}
   <div className="absolute inset-0 bg-gradient-to-r from-[#0F3D3A]/90 via-[#0F3D3A]/60 to-[#0F3D3A]/5" />
-
-  <div className="relative z-10 flex items-center justify-between px-[5%] pt-5">
-    <p className={`${BODY} text-[9px] font-medium uppercase tracking-[0.2em] text-white/90`}>
-      Vibgyor Equator / Fine Jewellery
-    </p>
-
-    <p className={`${BODY} hidden text-[9px] uppercase tracking-[0.16em] text-white/75 sm:block`}>
-      The jewellery collection
-    </p>
-  </div>
-
   <div className="relative z-10 flex flex-1 items-center px-[7%] py-16">
     <div className="max-w-[620px] text-left">
       <p className={`${BODY} jewellery-rise mb-5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#F5DABF]`}>

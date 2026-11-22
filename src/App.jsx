@@ -10,7 +10,7 @@ import CoinsPage from "./pages/CoinsPage.jsx";
 // import CountryCoinsPage from "./pages/CountryCoinsPage.jsx";
 
 import GemsJewelleryPage from "./pages/GemsJewelleryPage.jsx";
-
+import AntiquesPage from "./pages/AntiquesPage.jsx";
 function PlaceholderPage({ title, description }) {
   return (
     <main className="min-h-[65vh] bg-[#F5DABF] px-[7%] py-24 text-center">
@@ -76,15 +76,7 @@ export default function App() {
         />
 
         {/* Antiques */}
-        <Route
-          path="/antiques"
-          element={
-            <PlaceholderPage
-              title="Antiques"
-              description="Explore objects and artefacts with a story of their own."
-            />
-          }
-        />
+        <Route path="/antiques" element={<AntiquesPage />} />
 
         {/* Contact */}
         <Route

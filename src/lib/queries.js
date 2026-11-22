@@ -6,6 +6,8 @@ export const allProductsQuery = `
     "slug": slug.current,
     category,
     jewelleryType,
+    antiqueType,
+    paintingType,
     country,
     year,
     denomination,
@@ -17,4 +19,4 @@ export const allProductsQuery = `
     coverImage,
     gallery
   }
-`
+`;

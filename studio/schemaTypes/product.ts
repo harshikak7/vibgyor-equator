@@ -71,6 +71,58 @@ export const product = defineType({
         }),
     }),
 
+    // Antique Type - only visible for Antiques
+    defineField({
+      name: 'antiqueType',
+      title: 'Antique Type',
+      description: 'Choose whether this antique is a painting or a handicraft.',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Painting', value: 'painting' },
+          { title: 'Handicrafts', value: 'handicrafts' },
+        ],
+        layout: 'radio',
+      },
+      hidden: ({ document }) => document?.category !== 'antiques',
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          if (context.document?.category === 'antiques' && !value) {
+            return 'Please select an antique type.'
+          }
+          return true
+        }),
+    }),
+
+    // Painting Type - only visible when Antique Type is Painting
+    defineField({
+      name: 'paintingType',
+      title: 'Painting Type',
+      description: 'Choose the type of painting.',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Gemstone Painting', value: 'gemstone-painting' },
+          { title: 'Cloth Painting', value: 'cloth-painting' },
+        ],
+        layout: 'radio',
+      },
+      hidden: ({ document }) =>
+        document?.category !== 'antiques' ||
+        document?.antiqueType !== 'painting',
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          if (
+            context.document?.category === 'antiques' &&
+            context.document?.antiqueType === 'painting' &&
+            !value
+          ) {
+            return 'Please select a painting type.'
+          }
+          return true
+        }),
+    }),
+
     defineField({
       name: 'coverImage',
       title: 'Main Product Image',
