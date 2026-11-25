@@ -13,6 +13,7 @@ import GemsJewelleryPage from "./pages/GemsJewelleryPage.jsx";
 import AntiquesPage from "./pages/AntiquesPage.jsx";
 
 import ContactPage from "./pages/ContactPage.jsx";
+import StampsPage from "./pages/StampsPage.jsx";
 function PlaceholderPage({ title, description }) {
   return (
     <main className="min-h-[65vh] bg-[#F5DABF] px-[7%] py-24 text-center">
@@ -71,6 +72,7 @@ export default function App() {
           element={<CollectionPage />}
         />
 
+          <Route path="/rare-finds/stamps" element={<StampsPage />} />
         {/* Gems & Jewellery */}
         <Route
           path="/gems-jewellery"

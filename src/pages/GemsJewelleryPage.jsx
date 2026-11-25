@@ -1,3 +1,4 @@
+
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowUpRight, ChevronDown, Plus } from "lucide-react";
 import { useProducts } from "../hooks/useProducts";
@@ -114,12 +115,13 @@ function sortProducts(items) {
     if (a.featured !== b.featured) {
       return a.featured ? -1 : 1;
     }
+
     return (a.displayOrder ?? 999) - (b.displayOrder ?? 999);
   });
 }
 
 export default function GemsJewelleryPage() {
-  const { products = [], loading, error } = useProducts();
+  const { products = [], loading } = useProducts();
 
   const [activeType, setActiveType] = useState("All");
   const [sortBy, setSortBy] = useState("featured");
@@ -157,12 +159,12 @@ export default function GemsJewelleryPage() {
   );
 
   const featuredProducts = useMemo(
-  () =>
-    sortProducts(
-      jewelleryProducts.filter((product) => product.featured === true)
-    ),
-  [jewelleryProducts]
-);
+    () =>
+      sortProducts(
+        jewelleryProducts.filter((product) => product.featured === true)
+      ),
+    [jewelleryProducts]
+  );
 
   const displayedProducts = useMemo(() => {
     let result = [...jewelleryProducts];
@@ -174,9 +176,11 @@ export default function GemsJewelleryPage() {
     }
 
     if (sortBy === "featured") result = sortProducts(result);
+
     if (sortBy === "name") {
       result.sort((a, b) => a.name.localeCompare(b.name));
     }
+
     if (sortBy === "order") {
       result.sort(
         (a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999)
@@ -195,20 +199,13 @@ export default function GemsJewelleryPage() {
     }
 
     const message = `Hello Vibgyor Equator, I'm interested in ${product.name}. Could you please share more details?`;
+
     window.open(
       `https://wa.me/${phone}?text=${encodeURIComponent(message)}`,
       "_blank",
       "noopener,noreferrer"
     );
   };
-
-  const heroSrc = heroProduct?.coverImage
-    ? urlFor(heroProduct.coverImage)
-        .width(1800)
-        .auto("format")
-        .quality(90)
-        .url()
-    : "";
 
   const initiallyVisibleTypes = jewelleryTypes.slice(0, 4);
   const additionalTypes = jewelleryTypes.slice(4);
@@ -218,39 +215,43 @@ export default function GemsJewelleryPage() {
       <style>{motionCss}</style>
 
       {/* HERO */}
-<section className="relative flex min-h-[66vh] flex-col overflow-hidden bg-[#0F3D3A] md:min-h-[76vh]">
+      <section className="relative flex min-h-[480px] flex-col overflow-hidden bg-[#0F3D3A] md:min-h-[600px]">
+        {/* Local asset image - no Sanity hero image */}
+        <img
+          src={jewelleryHero}
+          alt="Vibgyor Equator fine jewellery collection"
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
 
-  {/* Hero background image */}
-  <img
-    src={jewelleryHero}
-    alt="Vibgyor Equator fine jewellery collection"
-    className="absolute inset-0 h-full w-full object-cover object-center"
-  />
+        {/* Image overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0F3D3A]/90 via-[#0F3D3A]/55 to-[#0F3D3A]/5" />
 
-  {/* Image overlay */}
-  <div className="absolute inset-0 bg-gradient-to-r from-[#0F3D3A]/90 via-[#0F3D3A]/60 to-[#0F3D3A]/5" />
-  <div className="relative z-10 flex flex-1 items-center px-[7%] py-16">
-    <div className="max-w-[620px] text-left">
-      <p className={`${BODY} jewellery-rise mb-5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#F5DABF]`}>
-        A collection to treasure
-      </p>
+        <div className="relative z-10 flex flex-1 items-center px-[7%] py-16">
+          <div className="max-w-[620px] text-left">
+            <p
+              className={`${BODY} jewellery-rise mb-5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#F5DABF]`}
+            >
+              A collection to treasure
+            </p>
 
-      <h1 className={`${HEADING} jewellery-rise text-[clamp(2.8rem,6.5vw,6rem)] font-semibold leading-[1.12] text-white`}>
-        Beauty in every
-        <br />
-        <span className="italic text-[#F5DABF]">detail.</span>
-      </h1>
+            <h1
+              className={`${HEADING} jewellery-rise text-[clamp(2.8rem,6.5vw,6rem)] font-semibold leading-[1.12] text-white`}
+            >
+              Beauty in every
+              <br />
+              <span className="italic text-[#F5DABF]">detail.</span>
+            </h1>
 
-      <a
-        href="#jewellery-catalogue"
-        className={`${BODY} jewellery-rise mt-7 inline-flex items-center gap-3 border border-white/75 px-6 py-3.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-white transition-colors duration-300 hover:border-[#F5DABF] hover:bg-[#F5DABF] hover:text-[#0F3D3A]`}
-      >
-        Explore collection
-        <ArrowUpRight size={15} />
-      </a>
-    </div>
-  </div>
-</section>
+            <a
+              href="#jewellery-catalogue"
+              className={`${BODY} jewellery-rise mt-7 inline-flex items-center gap-3 border border-white/75 px-6 py-3.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-white transition-colors duration-300 hover:border-[#F5DABF] hover:bg-[#F5DABF] hover:text-[#0F3D3A]`}
+            >
+              Explore collection
+              <ArrowUpRight size={15} />
+            </a>
+          </div>
+        </div>
+      </section>
 
       {/* EDITORIAL SECTION */}
       <section className="px-[5%] py-10 md:py-14">
@@ -262,12 +263,17 @@ export default function GemsJewelleryPage() {
           )}
 
           <Reveal className="order-3 col-span-2 px-2 py-2 text-center md:order-2 md:col-span-1">
-            <h2 className={`${HEADING} text-[clamp(1.7rem,3vw,2.8rem)] font-semibold leading-[1.3] text-[#0F3D3A]`}>
+            <h2
+              className={`${HEADING} text-[clamp(1.7rem,3vw,2.8rem)] font-semibold leading-[1.3] text-[#0F3D3A]`}
+            >
               Jewellery made
               <br />
               to be treasured.
             </h2>
-            <p className={`${BODY} mx-auto mt-3 max-w-[260px] text-[11px] leading-6 text-[#0F3D3A]/70`}>
+
+            <p
+              className={`${BODY} mx-auto mt-3 max-w-[260px] text-[11px] leading-6 text-[#0F3D3A]/70`}
+            >
               Thoughtfully chosen pieces, each with a character of its own.
             </p>
           </Reveal>
@@ -285,10 +291,15 @@ export default function GemsJewelleryPage() {
         <div className="mx-auto max-w-[1400px]">
           <div className="mb-6 flex items-end justify-between gap-4">
             <div>
-              <p className={`${BODY} mb-2 text-[9px] font-semibold uppercase tracking-[0.18em] text-[#6C151E]`}>
+              <p
+                className={`${BODY} mb-2 text-[9px] font-semibold uppercase tracking-[0.18em] text-[#6C151E]`}
+              >
                 A closer look
               </p>
-              <h2 className={`${HEADING} text-2xl font-semibold text-[#0F3D3A] md:text-3xl`}>
+
+              <h2
+                className={`${HEADING} text-2xl font-semibold text-[#0F3D3A] md:text-3xl`}
+              >
                 Selected pieces
               </h2>
             </div>
@@ -318,13 +329,21 @@ export default function GemsJewelleryPage() {
       </section>
 
       {/* COMPLETE COLLECTION */}
-      <section id="jewellery-catalogue" className="scroll-mt-24 px-[5%] py-10 md:py-14">
+      <section
+        id="jewellery-catalogue"
+        className="scroll-mt-24 px-[5%] py-10 md:py-14"
+      >
         <div className="mx-auto max-w-[1400px]">
           <Reveal className="mb-6 text-center">
-            <p className={`${BODY} mb-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-[#6C151E]`}>
+            <p
+              className={`${BODY} mb-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-[#6C151E]`}
+            >
               Find your piece
             </p>
-            <h2 className={`${HEADING} text-3xl font-semibold text-[#0F3D3A] md:text-4xl`}>
+
+            <h2
+              className={`${HEADING} text-3xl font-semibold text-[#0F3D3A] md:text-4xl`}
+            >
               The collection
             </h2>
           </Reveal>
@@ -346,18 +365,26 @@ export default function GemsJewelleryPage() {
                   type="button"
                   onClick={() => setShowAllTypes((current) => !current)}
                   aria-expanded={showAllTypes}
-                  aria-label={showAllTypes ? "Show fewer types" : "Show more types"}
+                  aria-label={
+                    showAllTypes ? "Show fewer types" : "Show more types"
+                  }
                   className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#6C151E]/50 text-[#6C151E] transition-all duration-300 hover:bg-[#6C151E] hover:text-[#F5DABF]"
                 >
                   <Plus
                     size={16}
-                    className={`transition-transform duration-300 ${showAllTypes ? "rotate-45" : ""}`}
+                    className={`transition-transform duration-300 ${
+                      showAllTypes ? "rotate-45" : ""
+                    }`}
                   />
                 </button>
               )}
             </div>
 
-            <div className={`jewellery-types ${showAllTypes ? "expanded" : ""}`}>
+            <div
+              className={`jewellery-types ${
+                showAllTypes ? "expanded" : ""
+              }`}
+            >
               <div className="jewellery-types-inner">
                 <div className="flex flex-wrap justify-center gap-2.5 pt-3">
                   {additionalTypes.map((type) => (
@@ -375,7 +402,9 @@ export default function GemsJewelleryPage() {
 
           {/* COUNT AND SORT */}
           <div className="mb-5 flex items-center justify-between">
-            <p className={`${BODY} text-[9px] font-medium uppercase tracking-[0.12em] text-[#0F3D3A]/60`}>
+            <p
+              className={`${BODY} text-[9px] font-medium uppercase tracking-[0.12em] text-[#0F3D3A]/60`}
+            >
               {displayedProducts.length} pieces
             </p>
 
@@ -390,7 +419,11 @@ export default function GemsJewelleryPage() {
                 <option value="order">Collection order</option>
                 <option value="name">Name: A to Z</option>
               </select>
-              <ChevronDown size={13} className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#0F3D3A]" />
+
+              <ChevronDown
+                size={13}
+                className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#0F3D3A]"
+              />
             </div>
           </div>
 
@@ -403,19 +436,31 @@ export default function GemsJewelleryPage() {
               className="grid grid-cols-2 gap-x-3 gap-y-8 sm:gap-x-5 md:grid-cols-3 md:gap-x-6"
             >
               {displayedProducts.map((product, index) => (
-                <Reveal key={product._id || product.name} delay={(index % 3) * 70}>
-                  <ProductCard product={product} onEnquire={handleEnquiry} />
+                <Reveal
+                  key={product._id || product.name}
+                  delay={(index % 3) * 70}
+                >
+                  <ProductCard
+                    product={product}
+                    onEnquire={handleEnquiry}
+                  />
                 </Reveal>
               ))}
             </div>
           ) : (
             <div className="flex min-h-[180px] flex-col items-center justify-center text-center">
-              <h3 className={`${HEADING} text-xl font-semibold text-[#0F3D3A]`}>
+              <h3
+                className={`${HEADING} text-xl font-semibold text-[#0F3D3A]`}
+              >
                 No pieces available
               </h3>
-              <p className={`${BODY} mt-2 text-xs text-[#0F3D3A]/60`}>
+
+              <p
+                className={`${BODY} mt-2 text-xs text-[#0F3D3A]/60`}
+              >
                 There are no available products in this type right now.
               </p>
+
               {activeType !== "All" && (
                 <button
                   onClick={() => setActiveType("All")}
@@ -456,19 +501,31 @@ function TiltCard({ product, side }) {
   const left = side === "left";
 
   return (
-    <div className={`mx-auto w-[90%] max-w-[300px] transition-transform duration-500 hover:rotate-0 ${left ? "-rotate-[5deg]" : "rotate-[5deg]"}`}>
+    <div
+      className={`mx-auto w-[90%] max-w-[300px] transition-transform duration-500 hover:rotate-0 ${
+        left ? "-rotate-[5deg]" : "rotate-[5deg]"
+      }`}
+    >
       <div className="bg-[#F1E8D9] p-2.5 pb-4 shadow-[0_18px_35px_-22px_rgba(15,61,58,0.45)]">
         <div className="aspect-[3/4] overflow-hidden bg-[#EAE4D8]">
           {product.coverImage && (
             <img
-              src={urlFor(product.coverImage).width(800).auto("format").quality(85).fit("max").url()}
+              src={urlFor(product.coverImage)
+                .width(800)
+                .auto("format")
+                .quality(85)
+                .fit("max")
+                .url()}
               alt={product.name}
               loading="lazy"
               className="h-full w-full object-contain p-4 transition-transform duration-700 hover:scale-105"
             />
           )}
         </div>
-        <p className={`${HEADING} mt-3 truncate px-1 text-xs font-semibold text-[#0F3D3A]`}>
+
+        <p
+          className={`${HEADING} mt-3 truncate px-1 text-xs font-semibold text-[#0F3D3A]`}
+        >
           {product.name}
         </p>
       </div>
@@ -482,25 +539,38 @@ function ProductCard({ product, onEnquire }) {
       <div className="relative aspect-square overflow-hidden bg-[#EAE4D8]">
         {product.coverImage ? (
           <img
-            src={urlFor(product.coverImage).width(900).auto("format").quality(85).fit("max").url()}
+            src={urlFor(product.coverImage)
+              .width(900)
+              .auto("format")
+              .quality(85)
+              .fit("max")
+              .url()}
             alt={product.name}
             loading="lazy"
             className="h-full w-full object-contain p-4 transition-transform duration-700 ease-out group-hover:scale-105 sm:p-7"
           />
         ) : (
-          <div className={`${BODY} flex h-full items-center justify-center text-xs text-[#0F3D3A]/40`}>
+          <div
+            className={`${BODY} flex h-full items-center justify-center text-xs text-[#0F3D3A]/40`}
+          >
             Vibgyor Equator
           </div>
         )}
       </div>
 
       <div className="pt-3">
-        <h3 className={`${HEADING} text-[10px] font-semibold leading-[1.6] text-[#0F3D3A] sm:text-xs`}>
+        <h3
+          className={`${HEADING} text-[10px] font-semibold leading-[1.6] text-[#0F3D3A] sm:text-xs`}
+        >
           {product.name}
         </h3>
-        <p className={`${BODY} mt-1 text-[8px] uppercase tracking-[0.1em] text-[#6C151E]/75 sm:text-[9px]`}>
+
+        <p
+          className={`${BODY} mt-1 text-[8px] uppercase tracking-[0.1em] text-[#6C151E]/75 sm:text-[9px]`}
+        >
           {formatType(product.jewelleryType) || "Fine Jewellery"}
         </p>
+
         <button
           type="button"
           onClick={() => onEnquire(product)}

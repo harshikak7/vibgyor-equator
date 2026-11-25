@@ -1,4 +1,3 @@
-
 import React, { useMemo } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
@@ -6,9 +5,9 @@ import { motion } from "framer-motion";
 import { useProducts } from "../hooks/useProducts";
 import { urlFor } from "../lib/imageUrl";
 
-const INDIA_CATALOGUE_URL = import.meta.env.VITE_INDIA_CATALOGUE_URL;
-const COUNTRIES_CATALOGUE_URL =
-  import.meta.env.VITE_COUNTRIES_CATALOGUE_URL;
+import coinHeroFrame from "../assets/coinpage.jpeg";
+
+const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER;
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -21,19 +20,21 @@ const fadeUp = {
   },
 };
 
-function openCatalogue(url) {
-  if (!url) {
-    alert("Catalogue link is not configured yet.");
+function openWhatsApp(message) {
+  const phone = (WHATSAPP_NUMBER || "").replace(/\D/g, "");
+
+  if (!phone) {
+    alert("WhatsApp number is not configured.");
     return;
   }
 
-  window.open(url, "_blank", "noopener,noreferrer");
+  const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, "_blank", "noopener,noreferrer");
 }
 
 export default function CoinsPage() {
   const { products = [], loading, error } = useProducts();
 
-  // Fetch coin products with a country name.
   const coinProducts = useMemo(() => {
     return products.filter(
       (product) =>
@@ -43,7 +44,6 @@ export default function CoinsPage() {
     );
   }, [products]);
 
-  // Group products by country.
   const countries = useMemo(() => {
     const groupedCountries = new Map();
 
@@ -68,9 +68,7 @@ export default function CoinsPage() {
             return a.featured ? -1 : 1;
           }
 
-          return (
-            (a.displayOrder ?? 999) - (b.displayOrder ?? 999)
-          );
+          return (a.displayOrder ?? 999) - (b.displayOrder ?? 999);
         });
 
         const imageProduct =
@@ -82,11 +80,11 @@ export default function CoinsPage() {
         );
 
         return {
-  name: country.name,
-  image: imageProduct?.coverImage,
-  productName: imageProduct?.name || "",
-  year: yearProduct?.year || "",
-};
+          name: country.name,
+          image: imageProduct?.coverImage,
+          productName: imageProduct?.name || "",
+          year: yearProduct?.year || "",
+        };
       })
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [coinProducts]);
@@ -143,74 +141,69 @@ export default function CoinsPage() {
 
   return (
     <main className="bg-[#F7F1E3] pb-16">
-
       {/* INDIA FEATURE SECTION */}
-      {india && (
-        <section className="px-4 pt-5 md:px-8 md:pt-7">
-          <motion.div
-            initial="hidden"
-            animate="show"
-            variants={fadeUp}
-            className="relative mx-auto flex min-h-[340px] max-w-[1500px] items-center overflow-hidden bg-[#0F3D3A] sm:min-h-[390px] md:min-h-[440px]"
-          >
-            {india.image && (
-              <img
-                src={urlFor(india.image)
-                  .width(2000)
-                  .auto("format")
-                  .quality(90)
-                  .url()}
-                alt="India coin collection"
-                className="absolute inset-0 h-full w-full object-cover object-center"
+      <section className="px-4 pt-5 md:px-8 md:pt-7">
+        <motion.div
+          initial="hidden"
+          animate="show"
+          variants={fadeUp}
+          className="relative mx-auto flex min-h-[340px] max-w-[1500px] items-center overflow-hidden bg-[#0F3D3A] sm:min-h-[390px] md:min-h-[440px]"
+        >
+          {/* CUSTOM HERO IMAGE FROM SRC/ASSETS */}
+          <img
+            src={coinHeroFrame}
+            alt="India coin collection"
+            className="absolute inset-0 h-full w-full object-contain object-center"
+          />
+
+          {/* Image overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0F3D3A]/90 via-[#0F3D3A]/55 to-[#0F3D3A]/15" />
+
+          <div className="relative z-10 flex w-full max-w-3xl flex-col items-start px-6 py-12 sm:px-10 md:px-14 lg:px-16">
+            <p className="mb-3 font-['Plus_Jakarta_Sans'] text-[10px] font-bold uppercase tracking-[0.25em] text-[#F5DABF] md:text-xs">
+              The Indian Collection
+            </p>
+
+            <h1 className="font-['Cinzel'] text-4xl font-bold leading-[1.15] text-[#F5DABF] sm:text-5xl md:text-6xl">
+              India
+            </h1>
+
+            <p className="mt-3 max-w-lg font-['Plus_Jakarta_Sans'] text-xs leading-6 text-white/85 sm:text-sm md:text-base">
+              Explore a collection celebrating India's rich
+              numismatic heritage, history and craftsmanship.
+            </p>
+
+            <button
+              type="button"
+              onClick={() =>
+                openWhatsApp(
+                  "Hello Vibgyor Equator, I'm interested in your India coin collection. Could you please share more details?"
+                )
+              }
+              className="group mt-6 inline-flex items-center gap-5 bg-[#F5DABF] px-6 py-3.5 font-['Plus_Jakarta_Sans'] text-[10px] font-bold uppercase tracking-[0.14em] text-[#0F3D3A] transition-colors duration-300 hover:bg-white md:mt-7 md:px-7 md:py-4"
+            >
+              Enquire Now
+              <ArrowUpRight
+                size={16}
+                className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
               />
-            )}
+            </button>
+          </div>
 
-            {/* Softer image overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0F3D3A]/90 via-[#0F3D3A]/55 to-[#0F3D3A]/15" />
-
-            <div className="relative z-10 flex w-full max-w-3xl flex-col items-start px-6 py-12 sm:px-10 md:px-14 lg:px-16">
-              <p className="mb-3 font-['Plus_Jakarta_Sans'] text-[10px] font-bold uppercase tracking-[0.25em] text-[#F5DABF] md:text-xs">
-                The Indian Collection
-              </p>
-
-              <h1 className="font-['Cinzel'] text-4xl font-bold leading-[1.15] text-[#F5DABF] sm:text-5xl md:text-6xl">
-                India
-              </h1>
-
-              <p className="mt-3 max-w-lg font-['Plus_Jakarta_Sans'] text-xs leading-6 text-white/85 sm:text-sm md:text-base">
-                Explore a collection celebrating India's rich
-                numismatic heritage, history and craftsmanship.
-              </p>
-
-              <button
-                type="button"
-                onClick={() => openCatalogue(INDIA_CATALOGUE_URL)}
-                className="group mt-6 inline-flex items-center gap-5 bg-[#F5DABF] px-6 py-3.5 font-['Plus_Jakarta_Sans'] text-[10px] font-bold uppercase tracking-[0.14em] text-[#0F3D3A] transition-colors duration-300 hover:bg-white md:mt-7 md:px-7 md:py-4"
-              >
-                View India Catalogue
-                <ArrowUpRight
-                  size={16}
-                  className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-                />
-              </button>
-            </div>
-
-            {/* Collection label */}
-            <div className="absolute bottom-5 right-6 hidden text-right sm:block md:bottom-7 md:right-9">
-              <p className="font-['Plus_Jakarta_Sans'] text-[9px] font-semibold uppercase tracking-[0.2em] text-white/65">
-                VIBGYOR EQUATOR
-              </p>
-              <p className="mt-1 font-['Cinzel'] text-sm text-[#F5DABF]">
-                India Collection
-              </p>
-            </div>
-          </motion.div>
-        </section>
-      )}
+          {/* Collection label */}
+          <div className="absolute bottom-5 right-6 hidden text-right sm:block md:bottom-7 md:right-9">
+            <p className="font-['Plus_Jakarta_Sans'] text-[9px] font-semibold uppercase tracking-[0.2em] text-white/65">
+              VIBGYOR EQUATOR
+            </p>
+            <p className="mt-1 font-['Cinzel'] text-sm text-[#F5DABF]">
+              India Collection
+            </p>
+          </div>
+        </motion.div>
+      </section>
 
       {/* OTHER COUNTRIES */}
       <section className="mx-auto max-w-[1500px] px-5 pt-12 md:px-10 md:pt-16">
-
         <div className="mb-7 flex flex-col justify-between gap-3 border-b border-[#0F3D3A]/15 pb-5 md:mb-9 md:flex-row md:items-end">
           <div>
             <p className="mb-2 font-['Plus_Jakarta_Sans'] text-[10px] font-bold uppercase tracking-[0.25em] text-[#6C151E] md:text-xs">
@@ -242,20 +235,10 @@ export default function CoinsPage() {
             className="grid grid-cols-2 gap-x-4 gap-y-7 sm:gap-x-6 sm:gap-y-9 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-7 lg:gap-y-10"
           >
             {otherCountries.map((country) => (
-              <motion.a
+              <motion.article
                 key={country.name}
-                href={COUNTRIES_CATALOGUE_URL || undefined}
-                target="_blank"
-                rel="noopener noreferrer"
                 variants={fadeUp}
-                onClick={(event) => {
-                  if (!COUNTRIES_CATALOGUE_URL) {
-                    event.preventDefault();
-                    alert("The country catalogue link is not configured yet.");
-                  }
-                }}
-                aria-label={`View ${country.name} coin catalogue`}
-                className="group block"
+                className="group block min-w-0"
               >
                 {/* Country image */}
                 <div className="relative aspect-[4/4.5] overflow-hidden bg-[#EDE6D8]">
@@ -276,30 +259,35 @@ export default function CoinsPage() {
                     </div>
                   )}
 
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 flex items-end justify-between bg-gradient-to-t from-[#0F3D3A]/75 via-transparent to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:p-5">
-                    <span className="font-['Plus_Jakarta_Sans'] text-[9px] font-bold uppercase tracking-[0.15em] text-white sm:text-[10px]">
-                      View Catalogue
-                    </span>
-
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F5DABF] text-[#0F3D3A] sm:h-9 sm:w-9">
-                      <ArrowUpRight size={16} />
-                    </span>
+                  {/* Hover overlay with WhatsApp enquiry */}
+                  <div className="absolute inset-0 flex items-end justify-between bg-gradient-to-t from-[#0F3D3A]/85 via-[#0F3D3A]/20 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100 sm:p-5">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        openWhatsApp(
+                          `Hello Vibgyor Equator, I'm interested in the ${country.name} coin collection. Could you please share more details?`
+                        )
+                      }
+                      className="inline-flex items-center gap-2 border border-[#F5DABF] bg-[#F5DABF] px-3 py-2.5 font-['Plus_Jakarta_Sans'] text-[9px] font-bold uppercase tracking-[0.12em] text-[#0F3D3A] transition-colors duration-300 hover:bg-white sm:px-4 sm:text-[10px]"
+                    >
+                      Enquire Now
+                      <ArrowUpRight size={15} />
+                    </button>
                   </div>
                 </div>
 
                 {/* Country title and year */}
                 <div className="flex items-start justify-between gap-2 border-b border-[#0F3D3A]/20 pb-3 pt-3 sm:pt-4">
-                  <div>
+                  <div className="min-w-0">
                     <h3 className="font-['Cinzel'] text-sm font-bold leading-snug text-[#0F3D3A] transition-colors duration-300 group-hover:text-[#6C151E] sm:text-base md:text-lg">
                       {country.name}
                     </h3>
 
                     {country.productName && (
-  <p className="mt-1 font-['Plus_Jakarta_Sans'] text-[10px] font-medium text-[#0F3D3A]/60 sm:text-xs">
-    {country.productName}
-  </p>
-)}
+                      <p className="mt-1 font-['Plus_Jakarta_Sans'] text-[10px] font-medium text-[#0F3D3A]/60 sm:text-xs">
+                        {country.productName}
+                      </p>
+                    )}
                   </div>
 
                   {country.year && (
@@ -308,7 +296,7 @@ export default function CoinsPage() {
                     </span>
                   )}
                 </div>
-              </motion.a>
+              </motion.article>
             ))}
           </motion.div>
         ) : (
@@ -321,15 +309,6 @@ export default function CoinsPage() {
               We are currently adding more countries to our
               coin catalogue. Please check back soon.
             </p>
-
-            <button
-              type="button"
-              onClick={() => openCatalogue(COUNTRIES_CATALOGUE_URL)}
-              className="mt-5 inline-flex items-center gap-3 border border-[#0F3D3A] px-6 py-3 font-['Plus_Jakarta_Sans'] text-[10px] font-bold uppercase tracking-widest text-[#0F3D3A] transition-colors hover:bg-[#0F3D3A] hover:text-[#F5DABF]"
-            >
-              Explore Catalogue
-              <ArrowUpRight size={15} />
-            </button>
           </div>
         )}
       </section>

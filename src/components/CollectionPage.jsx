@@ -6,7 +6,6 @@ import { ArrowUpRight, ChevronDown } from "lucide-react";
 
 import { useProducts } from "../hooks/useProducts";
 import { urlFor } from "../lib/imageUrl";
-
 const categories = [
   { label: "Gems & Jewellery", value: "gems-jewellery", link: "/gems-jewellery" },
   { label: "Coins", value: "coins", link: "/rare-finds/coins" },
