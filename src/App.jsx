@@ -11,6 +11,8 @@ import CoinsPage from "./pages/CoinsPage.jsx";
 
 import GemsJewelleryPage from "./pages/GemsJewelleryPage.jsx";
 import AntiquesPage from "./pages/AntiquesPage.jsx";
+
+import ContactPage from "./pages/ContactPage.jsx";
 function PlaceholderPage({ title, description }) {
   return (
     <main className="min-h-[65vh] bg-[#F5DABF] px-[7%] py-24 text-center">
@@ -79,15 +81,7 @@ export default function App() {
         <Route path="/antiques" element={<AntiquesPage />} />
 
         {/* Contact */}
-        <Route
-          path="/contact"
-          element={
-            <PlaceholderPage
-              title="Contact Us"
-              description="Get in touch with Vibgyor Equator."
-            />
-          }
-        />
+        <Route path="/contact" element={<ContactPage />} />
 
         {/* 404 */}
         <Route

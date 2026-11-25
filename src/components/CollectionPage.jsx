@@ -10,7 +10,7 @@ import { urlFor } from "../lib/imageUrl";
 const categories = [
   { label: "Gems & Jewellery", value: "gems-jewellery", link: "/gems-jewellery" },
   { label: "Coins", value: "coins", link: "/rare-finds/coins" },
-  { label: "Banknotes", value: "banknotes", link: "/rare-finds/banknotes" },
+  // { label: "Banknotes", value: "banknotes", link: "/rare-finds/banknotes" },
   { label: "Stamps", value: "stamps", link: "/rare-finds/stamps" },
   { label: "Antiques", value: "antiques", link: "/antiques" },
 ];

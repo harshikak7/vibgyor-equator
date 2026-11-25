@@ -9,11 +9,11 @@ const categoryDetails = {
     description: 'Explore coins from different countries and eras.',
     category: 'coins',
   },
-  banknotes: {
-    title: 'Banknotes',
-    description: 'Discover notes that carry stories from around the world.',
-    category: 'banknotes',
-  },
+  // banknotes: {
+  //   title: 'Banknotes',
+  //   description: 'Discover notes that carry stories from around the world.',
+  //   category: 'banknotes',
+  // },
   stamps: {
     title: 'Stamps',
     description: 'Explore pieces of history through stamps.',

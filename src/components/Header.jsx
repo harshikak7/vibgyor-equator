@@ -23,7 +23,7 @@ const waLink = (message) => {
 // Only these three items belong inside Rare Finds.
 const rareFinds = [
   { label: 'Coins', path: '/rare-finds/coins' },
-  { label: 'Banknotes', path: '/rare-finds/banknotes' },
+  // { label: 'Banknotes', path: '/rare-finds/banknotes' },
   { label: 'Stamps', path: '/rare-finds/stamps' },
 ];
 
